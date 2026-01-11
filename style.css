@@ -1,0 +1,39 @@
+-- 1. Создайте базу данных в MySQL Workbench
+CREATE DATABASE aviacompany_db;
+
+-- 2. Или выполните этот SQL скрипт
+USE aviacompany_db;
+
+-- Таблица самолетов
+CREATE TABLE airplanes (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    capacity INT NOT NULL
+);
+
+-- Таблица рейсов
+CREATE TABLE flights (
+    id VARCHAR(36) PRIMARY KEY,
+    departure_datetime DATETIME NOT NULL,
+    destination VARCHAR(200) NOT NULL,
+    airplane_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (airplane_id) REFERENCES airplanes(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_flight (departure_datetime, destination)
+);
+
+-- Таблица бронирований
+CREATE TABLE bookings (
+    id VARCHAR(36) PRIMARY KEY,
+    passenger_name VARCHAR(200) NOT NULL,
+    flight_id VARCHAR(36) NOT NULL,
+    FOREIGN KEY (flight_id) REFERENCES flights(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_passenger_flight (passenger_name, flight_id)
+);
+
+-- Добавление тестовых самолетов
+INSERT INTO airplanes (id, name, capacity) VALUES
+(UUID(), 'Airbus A320', 180),
+(UUID(), 'Boeing 737-800', 189),
+(UUID(), 'Airbus A321', 236),
+(UUID(), 'Boeing 777-300ER', 396),
+(UUID(), 'Airbus A350-900', 366);
